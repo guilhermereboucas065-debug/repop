@@ -1,0 +1,14 @@
+{
+  "name": "law-saas-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @lawsaas/api & npm run dev --workspace @lawsaas/web",
+    "dev:api": "npm run dev --workspace @lawsaas/api",
+    "dev:web": "npm run dev --workspace @lawsaas/web",
+    "build": "npm run build --workspace @lawsaas/api && npm run build --workspace @lawsaas/web",
+    "lint": "npm run lint --workspace @lawsaas/api && npm run lint --workspace @lawsaas/web"
+  }
+}
