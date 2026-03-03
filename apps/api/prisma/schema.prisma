@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubscriptionStatus {
+  FREE
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model User {
+  id                 String             @id @default(cuid())
+  name               String
+  email              String             @unique
+  passwordHash       String
+  officeName         String?
+  subscriptionStatus SubscriptionStatus @default(FREE)
+  billingCustomerId  String?
+  forms              TriageForm[]
+  createdAt          DateTime           @default(now())
+}
+
+model TriageForm {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  slug        String         @unique
+  questions   Json
+  lawyerId    String
+  lawyer      User           @relation(fields: [lawyerId], references: [id])
+  responses   FormResponse[]
+  createdAt   DateTime       @default(now())
+}
+
+model FormResponse {
+  id          String    @id @default(cuid())
+  formId      String
+  form        TriageForm @relation(fields: [formId], references: [id])
+  clientName  String
+  clientEmail String
+  answers     Json
+  summary     String
+  createdAt   DateTime  @default(now())
+}
